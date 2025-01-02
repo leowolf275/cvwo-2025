@@ -69,7 +69,6 @@ function Home() {
                           sx={{ color: 'text.secondary' }}
                         >
                           {book.author.toLowerCase()}
-                          Helooooooo
                         </Typography>
                       </CardContent>
                     </Box>
