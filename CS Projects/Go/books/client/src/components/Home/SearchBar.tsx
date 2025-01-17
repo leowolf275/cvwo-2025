@@ -8,7 +8,7 @@ import * as React from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
-import {Book} from '../types'
+import {Book} from '../../types/Book'
 import { ListItem, MenuItem, Stack } from '@mui/material';
 
 interface SearchBarProps {
@@ -24,7 +24,6 @@ export default function SearchBar(props: SearchBarProps) {
 
     const handleInput = (query: string) => {
       setQuery(query)
-      console.log("hi")
       onSelect(query)
       onSearch(query)
     }
@@ -41,10 +40,10 @@ export default function SearchBar(props: SearchBarProps) {
             handleInput(elem.value)
           }}
           options={books}
-          getOptionLabel={(option) => typeof option === "string" ? option : option['name']}
+          getOptionLabel={(option) => typeof option === "string" ? option : option['title']}
           renderOption={(props, option) => (
-            <MenuItem key={option.id} value={option.name} onClick={() => handleInput(option.name)}>
-              {option.name}
+            <MenuItem key={option.id} value={option.title} onClick={() => handleInput(option.title)}>
+              {option.title}
             </MenuItem>
           )}
           renderInput={(params) => (

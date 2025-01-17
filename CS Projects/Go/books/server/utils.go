@@ -23,8 +23,6 @@ func hashPassword(password string) (string, error) {
 func checkPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 
-	fmt.Println(err)
-
 	return err == nil
 }
 

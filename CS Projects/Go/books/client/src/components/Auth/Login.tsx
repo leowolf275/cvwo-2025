@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Routes, Route, Link } from 'react-router-dom';
 import App from '../App'
 import { Box, Button, Card, CardContent, TextField, Typography } from '@mui/material';
@@ -16,30 +16,27 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
-  const signIn = useSignIn();
   const navigate = useNavigate();
 
   const onSubmit = async (values: any) => {
     try {
+
       const response = await fetch("http://localhost:3000/login", {
         method: 'POST',
-        body: JSON.stringify(values)
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+        credentials: 'include'
       })
 
       const data = await response.json()
 
-      signIn({
-        auth: {
-          token: data.session_token,
-          type: 'Bearer', 
-        },
-        userState: {
-          username: values.username
-        },
-      });
-
-      //redirect user if log in was successful?!
-      navigate('/home')
+      if (data.session_token) {
+        localStorage.setItem('authToken', data.session_token)
+        localStorage.setItem('userid', data.userid)
+        navigate('/home')
+      }
 
     } catch (error) {
       console.log(error)
@@ -56,12 +53,6 @@ const Login = () => {
 
   return (
     <div>
-      <nav>
-        <Link to="/home">Home</Link>
-      </nav>
-      <Routes>
-        <Route path="/home" element={<App />} />
-      </Routes>
     <div className='center-compo'>
           <Card sx={{ display: 'flex', justifyContent: 'space-evenly', margin: 'auto', width: '300px', padding: '20px', flexDirection: 'column' }}>
             <Box>
@@ -75,15 +66,20 @@ const Login = () => {
                 id="outlined-required"
                 name="username"
                 label="Username"
-                defaultValue=""
+                type='text'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.username}
               />
               <TextField
                 required
                 id="outlined-password-input"
                 name="password"
-                label="Password"
                 type="password"
-                autoComplete="current-password"
+                label="Password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
               />
               <button type='submit'>Login</button>
               </form>
